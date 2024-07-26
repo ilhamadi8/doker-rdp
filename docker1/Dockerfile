@@ -1,5 +1,5 @@
 # Use the official Ubuntu 18.04 base image
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # Set environment variables to avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,6 +23,9 @@ RUN apt-get update && \
         python3-packaging \
         xrdp \
         curl \
+        fonts-liberation libu2f-udev libvulkan1 \
+        python3-psutil python3-xdg libgcc1 libutempter0 \
+        libgcc-s1\
         xfce4-terminal && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -34,6 +37,14 @@ RUN echo "xfce4-session" > /etc/skel/.xsession
 RUN curl -fSL "https://download.nomachine.com/download/8.13/Linux/nomachine_8.13.1_1_amd64.deb" \
     -o nomachine.deb && dpkg -i nomachine.deb && \
     sed -i "s|#EnableClipboard both|EnableClipboard both |g" /usr/NX/etc/server.cfg && \
+    rm -f nomachine.deb
+
+RUN curl -fSL "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+    -o nomachine.deb && dpkg -i nomachine.deb && \
+    rm -f nomachine.deb
+
+RUN curl -fSL "https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb" \
+    -o nomachine.deb && dpkg -i nomachine.deb && \
     rm -f nomachine.deb
 
 # Create users
