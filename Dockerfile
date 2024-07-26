@@ -29,9 +29,12 @@ RUN apt-get update && \
 RUN echo "xfce4-session" > /etc/skel/.xsession
 
 # Create a user
-RUN useradd -m -s /bin/bash user && \
-    echo "user:123456" | chpasswd && \
-    adduser user sudo
+RUN for i in $(seq 1 5); do \
+    username="user$i"; \
+    useradd -m -s /bin/bash $username && \
+    echo "$username:123456" | chpasswd && \
+    adduser $username sudo; \
+done
 
 # Expose XRDP port
 EXPOSE 3389
